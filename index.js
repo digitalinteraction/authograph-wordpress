@@ -14,9 +14,6 @@
             //button functionality.
             ed.addCommand("authograph_command", function() {
                 var selected_text = ed.selection.getContent();
-                
-                
-
                 var image = wp.media({ 
                 title: 'Upload Image',
                 // mutiple: true if you want to upload multiple files at once
@@ -25,31 +22,40 @@
 
                 }).open()
                     .on('select', function(e){
+
                         // This will return the selected image from the Media Uploader, the result is an object
                         var uploaded_image = image.state().get('selection').first();
                         // We convert uploaded_image to a JSON object to make accessing it easier
                         // Output to the console uploaded_image
-                        console.log(uploaded_image);
                         var image_url = uploaded_image.toJSON().url;
-                        // Let's assign the url value to the input field
+                        var image_name = uploaded_image.toJSON().filename;
+                        var image_id = uploaded_image.toJSON().id;
+                        console.log(uploaded_image.toJSON());
 
-                        var return_text = '<img data-xmp src="'+image_url+'"/>';
+                        var return_text = '<img data-xmp="xmp_'+image_name+'" src="'+image_url+'"/>';
                         
-                        
-                        window.addEventListener("authograph-metadata", receiveMetadata, false);
-
-                        function receiveMetadata(event){
-                            return_text += "<h1>content</h1>";
-                            ed.execCommand("mceInsertContent", 0, return_text);
-                            return;
-                        }
                         
                         var tb_frame = "https://digitalinteraction.github.io/fourcorners-editor/?TB_iframe=true"; //"wp-authograph-editor.php?TB_iframe=true";
                         tb_show("Authograph - Metadata Editor", tb_frame);
 
-                        
+                        var iframe = jQuery("iframe#TB_iframeContent")[0];
+                        iframe.addEventListener("message", receiveMetadata, false);
+                        function receiveMetadata(event){
+                            var scriptData = JSON.parse(event.data);
+                            return_text += "<script id='xmp_"+image_name+"' type='text/json'>"+scriptData+"</script>";
+                            ed.execCommand("mceInsertContent", 0, return_text);
+                            return;
+                        }
 
-                    });
+
+                        jQuery.get("/wp-json/wp_authograph/metadata/"+image_id,function(data, status){
+                            alert(data);
+                                iframe.contentWindow.postMessage(data,"*");
+                        });
+
+
+                        
+                    })
                 });
 
         },

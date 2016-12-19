@@ -8,6 +8,7 @@ Author:      Open Lab, Newcastle University
 Author URI:  https://openlab.ncl.ac.uk
 License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Namespaces: wp_authograph
 */
 
 
@@ -44,3 +45,37 @@ function load_wp_media_files() {
     wp_enqueue_media();
 }
 add_action( 'admin_enqueue_scripts', 'load_wp_media_files' );
+
+
+
+function rewrite_media_metadata($media, $metadata){
+    
+}
+
+add_action('rest_api_init','register_metadata_rest');
+function register_metadata_rest(){
+    register_rest_route('wp_authograph','/metadata/(?P<id>\d+)',array(
+        'methods'=>'GET',
+        'callback'=>'read_media_metadata',
+        'args' => array(
+			'id' => array(
+				'validate_callback' => function($param, $request, $key) {
+					return is_numeric( $param );
+				}
+			),
+		),
+        ));
+}
+
+function read_media_metadata($request_data){
+    $values = wp_get_attachment_metadata($request_data['id']);
+
+    $data = $values['image_meta'];
+    $copyright = $data['copyright'];
+    $title = $data['title'];
+    $created = $data['created_timestamp'];
+    $description = $data['caption'];
+    $credit = $data['credit'];
+    $return_text = '{"context": [],"backstory":{"text": "'.$title.'","date": "'.date_i18n("F j, Y",$created).'"},"creativeCommons" :{ "copyright":"'.$copyright.'"}}';
+    return $return_text;
+}
