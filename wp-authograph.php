@@ -3,12 +3,11 @@
 Plugin Name: Authograph Plugin
 Plugin URI:  https://fourcorners.io/
 Description: WordPress Plugin to create and embed authograph images into wordpress content
-Version:     1
+Version:     1.0
 Author:      Open Lab, Newcastle University
 Author URI:  https://openlab.ncl.ac.uk
 License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Namespaces: wp_authograph
 */
 
 
