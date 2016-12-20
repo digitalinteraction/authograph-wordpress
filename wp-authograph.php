@@ -76,6 +76,6 @@ function read_media_metadata($request_data){
     $created = $data['created_timestamp'];
     $description = $data['caption'];
     $credit = $data['credit'];
-    $return_text = '{"context": [],"backstory":{"text": "'.$title.'","date": "'.date_i18n("F j, Y",$created).'"},"creativeCommons" :{ "copyright":"'.$copyright.'"}}';
+    $return_text = '{"context": [],"backStory":{"text": "'.$title.'","date": "'.date_i18n("F j, Y",$created).'"},"creativeCommons" :{ "copyright":"'.$copyright.'"}}';
     return $return_text;
 }

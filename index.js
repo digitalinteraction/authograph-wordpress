@@ -30,26 +30,25 @@
                         var image_url = uploaded_image.toJSON().url;
                         var image_name = uploaded_image.toJSON().filename;
                         var image_id = uploaded_image.toJSON().id;
-                        console.log(uploaded_image.toJSON());
 
-                        var return_text = '<img data-xmp="xmp_'+image_name+'" src="'+image_url+'"/>';
+                        var return_text = '<img data-4c="xmp_'+image_name+'" src="'+image_url+'"/>';
                         
                         
                         var tb_frame = "https://digitalinteraction.github.io/fourcorners-editor/?TB_iframe=true"; //"wp-authograph-editor.php?TB_iframe=true";
                         tb_show("Authograph - Metadata Editor", tb_frame);
 
                         var iframe = jQuery("iframe#TB_iframeContent")[0];
-                        iframe.addEventListener("message", receiveMetadata, false);
+                        
+                        window.addEventListener("message", receiveMetadata, false);
                         function receiveMetadata(event){
-                            var scriptData = JSON.parse(event.data);
-                            return_text += "<script id='xmp_"+image_name+"' type='text/json'>"+scriptData+"</script>";
+                            tb_remove();
+                            var scriptData = event.data;
+                            return_text += "<script data-4c-meta='xmp_"+image_name+"' type='text/json'>"+scriptData+"</script>";
                             ed.execCommand("mceInsertContent", 0, return_text);
                             return;
                         }
 
-
                         jQuery.get("/wp-json/wp_authograph/metadata/"+image_id,function(data, status){
-                            alert(data);
                                 iframe.contentWindow.postMessage(data,"*");
                         });
 
