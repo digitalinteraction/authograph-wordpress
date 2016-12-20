@@ -8,8 +8,38 @@ See the [Project Site](https://fourcorners.io) for more background on the projec
 
 [Click Here](https://digitalinteraction.github.io/authograph/docs/) to see a live demo in action.
 
+## Installing the Plugin
+
+[Download the plugin]() and add to site using the Wordpress admin panel.
+
 ## Using the Wordpress Plugin
 
+Follow the following steps for each image that you want to add Authograph metadata to:
+
+# Step 1 - Login
+Login to Wordpress using your details:
+
+`http://<yoursite>/wp-admin`
+
+![](tutorials/login.png)
+
+# Step 2 - Add an Authograph image to your site
+
+![](tutorials/editpost.png)
+
+Upload the image:
+
+![](tutorials/addmedia.png)
+
+Add to the post:
+
+![](tutorials/image1.png)
+
+Press `Update` and save your post.
+
+Visiting your page will now augment your image with your metadata when you hover over the corners.
+
+![](tutorials/result.png)
 
 ----
 
