@@ -6,7 +6,7 @@
 
 See the [Project Site](https://fourcorners.io) for more background on the project and future directions.
 
-[Click Here](https://digitalinteraction.github.io/authograph/docs/) to see a live demo in action.
+[Click Here](https://digitalinteraction.github.io/fourcorners/docs/) to see a live demo in action.
 
 # Installing the Plugin
 
