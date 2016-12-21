@@ -27,19 +27,31 @@ Login to Wordpress using your details:
 
 ![](tutorials/editpost.png)
 
-Upload the image:
+Select the *Insert Authograph* button on the toolbar: 
 
-![](tutorials/addmedia.png)
+![](tutorials/button.png)
 
-Add to the post:
+Select your image (by uploading or selecting a previously uploaded image):
 
-![](tutorials/image1.png)
+![](tutorials/selectmedia.png)
 
-Press `Update` and save your post.
+Fill in metadata about the image:
+
+![](tutorials/editor.png)
+
+Press `Save` to insert the augmented image into your post.
+
+> Note the small icon next to the image -- do not delete this, it will not be shown on your site.
+
+![](tutorials/result.png)
+
+For reference, vieing your post in `Text` view will show your metadata alongside your image in the post. 
+
+![](tutorials/metadata.png)
 
 Visiting your page will now augment your image with your metadata when you hover over the corners.
 
-![](tutorials/result.png)
+![](tutorials/result1.png)
 
 ----
 
