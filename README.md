@@ -8,22 +8,35 @@ See the [Project Site](https://fourcorners.io) for more background on the projec
 
 [Click Here](https://digitalinteraction.github.io/authograph/docs/) to see a live demo in action.
 
-## Installing the Plugin
+# Installing the Plugin
 
-[Download the plugin]() and add to site using the Wordpress admin panel.
+[Download the plugin](https://github.com/digitalinteraction/fourcorners-wordpress/releases/download/1.0/wp-authograph.zip) from our repository to your local computer.
 
-## Using the Wordpress Plugin
+In your Wordpress admin panel `admin > add plugin > upload plugin`:
+
+![](tutorials/uploadbtn.png)
+
+Upload the file you downloaded above:
+
+![](tutorials/dropfile.png)
+
+Activate the plugin:
+
+![](tutorials/activate.png)
+
+
+# Using the Wordpress Plugin
 
 Follow the following steps for each image that you want to add Authograph metadata to:
 
-# Step 1 - Login
+## Step 1 - Login
 Login to Wordpress using your details:
 
 `http://<yoursite>/wp-admin`
 
 ![](tutorials/login.png)
 
-# Step 2 - Add an Authograph image to your site
+## Step 2 - Add an Authograph image to your site
 
 ![](tutorials/editpost.png)
 
