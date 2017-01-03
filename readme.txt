@@ -7,7 +7,7 @@ Stable tag: 4.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-**Authograph** is a way for photo-journalists and content creators to display a rich visual overlay of metadata onto their web-based images. Announced at World Press Photo Foundation awards ceremony 2016, this simple drop-in javascript library automatically augments seleted photos with additional content, curated by the content owner.
+Authograph is a way for photo-journalists and content creators to display a rich visual overlay of metadata onto their web-based images.
 
 == Description ==
 
@@ -42,4 +42,3 @@ This section describes how to install the plugin and get it working.
 1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 1. Thats it, you're ready to start using Authograph images via the wordpress editor toolbar.
-
