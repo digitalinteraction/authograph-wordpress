@@ -4,11 +4,13 @@
         //url argument holds the absolute url of our plugin directory
         init : function(ed, url) {
 
-            //add new button     
+            //add new button   
+
+
             ed.addButton("Authograph", {
                 title : "Insert Authograph",
                 cmd : "authograph_command",
-                image : "https://fourcorners.io/wp-content/uploads/2016/10/fourcorners-logo-300x300.png"
+                image : authograph_php.plugin_url+"fourcorners-logo-150x150.png"
             });
 
             //button functionality.
@@ -34,7 +36,7 @@
                         var return_text = '<img data-4c="xmp_'+image_name+'" src="'+image_url+'"/>';
                         
                         
-                        var tb_frame = "https://digitalinteraction.github.io/fourcorners-editor/?TB_iframe=true"; //"wp-authograph-editor.php?TB_iframe=true";
+                        var tb_frame = "https://cdn.rawgit.com/digitalinteraction/fourcorners-editor/gh-pages/index.html?TB_iframe=true"; //"wp-authograph-editor.php?TB_iframe=true";
                         tb_show("Authograph - Metadata Editor", tb_frame);
 
                         var iframe = jQuery("iframe#TB_iframeContent")[0];
@@ -43,7 +45,7 @@
                         function receiveMetadata(event){
                             tb_remove();
                             var scriptData = event.data;
-                            return_text += "<script data-4c-meta='xmp_"+image_name+"' type='text/json'>"+scriptData+"</script>";
+                            return_text += "<br /><script data-4c-meta='xmp_"+image_name+"' type='text/json'>"+scriptData+"</script>";
                             ed.execCommand("mceInsertContent", 0, return_text);
                             return;
                         }

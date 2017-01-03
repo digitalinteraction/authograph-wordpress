@@ -1,9 +1,9 @@
 <?php 
 /*
-Plugin Name: Authograph Plugin
+Plugin Name: Authograph
 Plugin URI:  https://fourcorners.io/
 Description: WordPress Plugin to create and embed authograph images into wordpress content
-Version:     1.0
+Version:     1.1
 Author:      Open Lab, Newcastle University
 Author URI:  https://openlab.ncl.ac.uk
 License:     GPL2
@@ -14,48 +14,57 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 function authograph_link_script(){
     $ffVersion = "*"; 
-    wp_enqueue_script("authograph_render","https://digitalinteraction.github.io/fourcorners/dist/4c.js?ver=".$ffVersion,array(),null,true);
+    wp_enqueue_script("authograph_render","https://cdn.rawgit.com/digitalinteraction/fourcorners/master/dist/4c.js?ver=".$ffVersion,array(),null,true);
 }
 add_action('wp_enqueue_scripts','authograph_link_script');
 
 
 
-function enqueue_plugin_scripts($plugin_array)
+function authograph_enqueue_plugin_scripts($plugin_array)
 {
     //enqueue TinyMCE plugin script with its ID.
-    $plugin_array["authograph_button_plugin"] =  plugin_dir_url(__FILE__) . "index.js";
+    $plugin_array["authograph_button_plugin"] =  plugin_dir_url(__FILE__) . "authograph_index.js";
+
+
+    wp_register_script('authograph_index','authograph_index.js',array(),NULL,true);
+    wp_enqueue_script('authograph_index');
+
+    $authograph_custom = array( 'plugin_url' => plugins_url().'/wp-authograph/' );
+    wp_localize_script( 'authograph_index', 'authograph_php', $authograph_custom );
+
+    
     return $plugin_array;
 }
 
-add_filter("mce_external_plugins", "enqueue_plugin_scripts");
+add_filter("mce_external_plugins", "authograph_enqueue_plugin_scripts");
 
 
-function register_buttons_editor($buttons)
+function authograph_register_buttons_editor($buttons)
 {
     //register buttons with their id.
     array_push($buttons, "Authograph");
     return $buttons;
 }
-add_filter("mce_buttons", "register_buttons_editor");
+add_filter("mce_buttons", "authograph_register_buttons_editor");
 
 
 // UPLOAD ENGINE
-function load_wp_media_files() {
+function load_authograph_media_files() {
     wp_enqueue_media();
 }
-add_action( 'admin_enqueue_scripts', 'load_wp_media_files' );
+add_action( 'admin_enqueue_scripts', 'load_authograph_media_files' );
 
 
 
-function rewrite_media_metadata($media, $metadata){
+function authograph_rewrite_media_metadata($media, $metadata){
     
 }
 
-add_action('rest_api_init','register_metadata_rest');
-function register_metadata_rest(){
+add_action('rest_api_init','authograph_register_metadata_rest');
+function authograph_register_metadata_rest(){
     register_rest_route('wp_authograph','/metadata/(?P<id>\d+)',array(
         'methods'=>'GET',
-        'callback'=>'read_media_metadata',
+        'callback'=>'authograph_read_media_metadata',
         'args' => array(
 			'id' => array(
 				'validate_callback' => function($param, $request, $key) {
@@ -66,7 +75,7 @@ function register_metadata_rest(){
         ));
 }
 
-function read_media_metadata($request_data){
+function authograph_read_media_metadata($request_data){
     $values = wp_get_attachment_metadata($request_data['id']);
 
     $data = $values['image_meta'];
