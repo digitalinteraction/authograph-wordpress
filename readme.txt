@@ -11,7 +11,7 @@ Authograph is a way for photo-journalists and content creators to display a rich
 
 == Description ==
 
-**Authograph** is a way for photo-journalists and content creators to display a rich visual overlay of metadata onto their web-based images. Announced at World Press Photo Foundation awards ceremony 2016, this simple drop-in javascript library automatically augments seleted photos with additional content, curated by the content owner.
+**Authograph** is a way for photo-journalists and content creators to display a rich visual overlay of metadata onto their web-based images. Announced at World Press Photo Foundation awards ceremony 2016, this simple drop-in javascript library automatically augments selected photos with additional content, curated by the content owner.
 
 See the [Project Site](https://fourcorners.io) for more background on the project and future directions.
 
@@ -42,3 +42,18 @@ This section describes how to install the plugin and get it working.
 1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 1. Thats it, you're ready to start using Authograph images via the wordpress editor toolbar.
+
+
+== 3rd Party Services == 
+
+**Important Notice**
+
+WP Authograph uses externally hosted web services [Four Corners Metadata Editor](https://cdn.rawgit.com/digitalinteraction/fourcorners-editor/gh-pages/index.html) and [Four Corners Viewer](https://cdn.rawgit.com/digitalinteraction/fourcorners/master/dist/) to generate the Authograph images. 
+
+These 3rd Party Services DO NOT RETAIN ANY OF YOUR CONTENT. In both cases the services will run locally within your web browser. Your images are never uploaded beyond your own Wordpress site. 
+
+**Why are these services not embedded in the WP Authograph Plugin?**
+
+In an effort to remain completely transparent about how your images and metadata are handled, Authograph's web services and source code exist entirely within the public domain. Anyone can view and contribute to these services via our [GitHub Repository](https://github.com/digitalinteraction).
+
+
