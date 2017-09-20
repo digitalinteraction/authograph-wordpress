@@ -14,7 +14,9 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 function authograph_link_script(){
     $ffVersion = "*"; 
-    wp_enqueue_script("authograph_render","https://cdn.rawgit.com/digitalinteraction/fourcorners/master/dist/4c.js?ver=".$ffVersion,array(),null,true);
+    wp_enqueue_script("authograph_render","https://cdn.fourcorners.io/dist/4c.js?ver=".$ffVersion,array(),null,true);
+    // wp_enqueue_script("authograph_render","https://raw.githubusercontent.com/digitalinteraction/fourcorners/master/dist/4c.js?ver=".$ffVersion,array(),null,true);    
+    
 }
 add_action('wp_enqueue_scripts','authograph_link_script');
 
@@ -26,7 +28,7 @@ function authograph_enqueue_plugin_scripts($plugin_array)
     $plugin_array["authograph_button_plugin"] =  plugin_dir_url(__FILE__) . "authograph_index.js";
 
 
-    wp_register_script('authograph_index','authograph_index.js',array(),NULL,true);
+    wp_register_script('authograph_index','',array(),null,true);
     wp_enqueue_script('authograph_index');
 
     $authograph_custom = array( 'plugin_url' => plugins_url().'/wp-authograph/' );

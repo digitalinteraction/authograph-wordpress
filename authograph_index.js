@@ -8,7 +8,7 @@
 
 
             ed.addButton("Authograph", {
-                title : "Insert Authograph",
+                title : "Insert Four Corners",
                 cmd : "authograph_command",
                 image : authograph_php.plugin_url+"fourcorners-logo-150x150.png"
             });
@@ -18,7 +18,6 @@
                 var selected_text = ed.selection.getContent();
                 var image = wp.media({ 
                 title: 'Upload Image',
-                // mutiple: true if you want to upload multiple files at once
                 multiple: false, 
                 default_tab: 'upload'
 
@@ -35,12 +34,15 @@
 
                         var return_text = '<img data-4c="xmp_'+image_name+'" src="'+image_url+'"/>';
                         
+                        //display editor
+                        var tb_frame = "https://editor.fourcorners.io/?TB_iframe=true"; //"wp-authograph-editor.php?TB_iframe=true";
+                        // var tb_frame = "https://digitalinteraction.github.io/fourcorners-editor/?TB_iframe=true"; //"wp-authograph-editor.php?TB_iframe=true";
                         
-                        var tb_frame = "https://cdn.rawgit.com/digitalinteraction/fourcorners-editor/gh-pages/index.html?TB_iframe=true"; //"wp-authograph-editor.php?TB_iframe=true";
-                        tb_show("Authograph - Metadata Editor", tb_frame);
+                        tb_show("Four Corners - Metadata Editor", tb_frame);
 
                         var iframe = jQuery("iframe#TB_iframeContent")[0];
                         
+                        //register event listener for getting resulting data from editor
                         window.addEventListener("message", receiveMetadata, false);
                         function receiveMetadata(event){
                             tb_remove();
@@ -50,12 +52,12 @@
                             return;
                         }
 
+                        //get pre-existing metadata from the image using wordpress api
                         jQuery.get("/wp-json/wp_authograph/metadata/"+image_id,function(data, status){
-                                iframe.contentWindow.postMessage(data,"*");
+                            var obj = JSON.parse(data);
+                            obj.url = image_url;
+                            iframe.contentWindow.postMessage(JSON.stringify(obj),"*");
                         });
-
-
-                        
                     })
                 });
 
@@ -67,7 +69,7 @@
 
         getInfo : function() {
             return {
-                longname : "Authograph Button",
+                longname : "Four Corners Button",
                 author : "Kyle Montague",
                 version : "1"
             };
