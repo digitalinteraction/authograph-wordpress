@@ -14,9 +14,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 function authograph_link_script(){
     $ffVersion = "*"; 
-    wp_enqueue_script("authograph_render","https://cdn.fourcorners.io/dist/4c.js?ver=".$ffVersion,array(),null,true);
-    // wp_enqueue_script("authograph_render","https://raw.githubusercontent.com/digitalinteraction/fourcorners/master/dist/4c.js?ver=".$ffVersion,array(),null,true);    
-    
+    wp_enqueue_script("authograph_render","https://cdn.fourcorners.io/dist/4c.js?ver=".$ffVersion,array(),null,true);    
 }
 add_action('wp_enqueue_scripts','authograph_link_script');
 
