@@ -70,7 +70,7 @@
         getInfo : function() {
             return {
                 longname : "Four Corners Button",
-                author : "Kyle Montague",
+                author : "Tom Bartindale",
                 version : "1"
             };
         }
