@@ -14,7 +14,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 function authograph_link_script(){
     $ffVersion = "*"; 
-    wp_enqueue_script("authograph_render","https://cdn.fourcorners.io/dist/4c.js?ver=".$ffVersion,array(),null,true);    
+    wp_enqueue_script("authograph_render","https://cdn.fourcorners.io/dist/4c.js?ver=".$ffVersion,array(),null,true);       
 }
 add_action('wp_enqueue_scripts','authograph_link_script');
 
@@ -54,7 +54,38 @@ function load_authograph_media_files() {
 }
 add_action( 'admin_enqueue_scripts', 'load_authograph_media_files' );
 
+add_action( 'init', 'authograph_allow_attrs_on_imgs' );
+function authograph_allow_attrs_on_imgs() {
+    global $allowedposttags;
+ 
+    $tags = array( 'img' );
+    $new_attributes = array( 'data-4c' => array(), 'data-4c-metadata' => array()  );
+ 
+    foreach ( $tags as $tag ) {
+        if ( isset( $allowedposttags[ $tag ] ) && is_array( $allowedposttags[ $tag ] ) )
+            $allowedposttags[ $tag ] = array_merge( $allowedposttags[ $tag ], $new_attributes );
+    }
+}
 
+add_filter('tiny_mce_before_init', 'authograph_tiny_mce_before_init');
+function authograph_tiny_mce_before_init( $options ) {
+ 
+    if ( ! isset( $options['extended_valid_elements'] ) ) {
+        $options['extended_valid_elements'] = '';
+    } else {
+        $options['extended_valid_elements'] .= ',';
+    }
+ 
+    if ( ! isset( $options['custom_elements'] ) ) {
+        $options['custom_elements'] = '';
+    } else {
+        $options['custom_elements'] .= ',';
+    }
+ 
+    $options['extended_valid_elements'] .= 'img[data-c4|data-4c-metadata|src|title|alt|class|id|style]';
+    $options['custom_elements']         .= 'img[data-c4|data-4c-metadata|src|title|alt|class|id|style]';
+    return $options;
+}
 
 function authograph_rewrite_media_metadata($media, $metadata){
     

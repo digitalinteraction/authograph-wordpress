@@ -14,30 +14,27 @@
 
             //button functionality.
             ed.addCommand("authograph_command", function () {
-                var selected_text = ed.selection.getContent();
-                var new_image = true;
+                //var selected_text = ed.selection.getContent();
                 var selected_element = ed.selection.getNode();
-                var script_element = [];
+                var selected_tag, data_elements;
                 if (selected_element != null && selected_element.getAttribute('data-4c') != null) {
-                    script_element = (findImgScript(selected_element.getAttribute('data-4c')));
-                    new_image = (script_element.length == 0);
-                } else {
-                    new_image = true;
+                    selected_tag = selected_element.getAttribute('data-4c');
+                    data_elements = (find_script_metadata(selected_tag) || find_attribute_metadata(selected_tag));
                 }
 
-                if (new_image)
-                    create_new_image();
-                else
+                if (data_elements)
                     edit_4c_image();
+                else
+                    create_new_image();
+
 
                 function edit_4c_image() {
                     var image_url = selected_element.getAttribute('src');
-                    var image_name = selected_element.getAttribute('data-4c');
-
+                    var image_name = selected_tag;
                     var iframe = loadFrame(image_name, image_url);
 
                     jQuery("iframe#TB_iframeContent").load(function () {
-                        var obj = JSON.parse(jQuery(urldecode(script_element[0].getAttribute('data-wp-preserve'))).html());
+                        var obj = data_elements.data;
                         obj.url = image_url;
                         obj.version = VERSION;
                         obj.type = "data";
@@ -61,30 +58,52 @@
                             var image_url = uploaded_image.toJSON().url;
                             var image_name = uploaded_image.toJSON().filename;
                             var image_id = uploaded_image.toJSON().id;
-                            script_element = findImgScript('xmp_' + image_name);
+                            var script_element = find_script_metadata('xmp_' + image_name);
 
                             var iframe = loadFrame(image_name, image_url);
 
                             //get pre-existing metadata from the image using wordpress api
                             jQuery.get("/wp-json/wp_authograph/metadata/" + image_id, function (data, status) {
-                                var obj = (script_element.length > 0) ? JSON.parse(jQuery(urldecode(script_element[0].getAttribute('data-wp-preserve'))).html()) : JSON.parse(data);
+                                var obj = (script_element.el && script_element.el.length > 0) ? JSON.parse(jQuery(urldecode(script_element.el[0].getAttribute('data-wp-preserve'))).html()) : JSON.parse(data);
                                 obj.url = image_url;
                                 obj.version = VERSION;
                                 obj.type = "data";
                                 iframe.contentWindow.postMessage(JSON.stringify(obj), "*");
                             });
+ 
+                            
                         })
                 }
 
-                function findImgScript(tag) {
-                    var scriptElement = [];
-                    var scriptArray = ed.dom.select('img.mce-object[alt="<script>"]')
-                    scriptArray.forEach(function (script) {
+                function find_script_metadata(tag) {
+                    var data_elements = {};
+                    var script_elements = [];
+                    var script_array = ed.dom.select('img.mce-object[alt="<script>"]')
+                    script_array.forEach(function (script) {
                         if (jQuery(urldecode(script.getAttribute('data-wp-preserve'))).attr('data-4c-meta') == tag) {
-                            scriptElement.push(script);
+                            script_elements.push(script);
                         }
                     });
-                    return scriptElement;
+                    if (script_array.length > 0) {
+                        data_elements.data = JSON.parse(jQuery(urldecode(script_elements[0].getAttribute('data-wp-preserve'))).html());
+                        data_elements.el = script_elements;
+                        return data_elements;
+                    } else
+                        return;
+                }
+
+                function find_attribute_metadata(tag) {
+                    var data_elements = {};
+                    img_elements = ed.dom.select('img[data-4c="' + tag + '"][data-4c-metadata]');
+                    if (img_elements.length == 0) return;
+                    img_elements.forEach(function (el) {
+                        if (el.getAttribute('data-4c-metadata')) {
+                            data_elements.data = JSON.parse(decodeURI(el.getAttribute('data-4c-metadata')));
+                            return;
+                        }
+                    });
+                    data_elements.el = img_elements;
+                    return data_elements;
                 }
 
                 function urldecode(url) {
@@ -110,36 +129,49 @@
                     window.addEventListener("message", receiveMetadata, false);
                     function receiveMetadata(event) {
                         var data = JSON.parse(event.data);
-                        if (data.type == "data") {
-                            tb_remove();
-                            window.removeEventListener("message", receiveMetadata);
-                            var scriptData = event.data;
-                            var return_text = '<img data-4c="xmp_' + image_name + '" src="' + image_url + '"/>';
-                            return_text += "<br /><script data-4c-meta='xmp_" + image_name + "' type='text/json'>" + scriptData + "</script>";
-                            if (script_element.length > 0) script_element.forEach(function (n) { n.remove() });
-                            ed.execCommand("mceInsertContent", 0, return_text);
-                        } else if (data.type == "imageRequest") {
+                        if (data.type == "imageRequest") {
                             var image = wp.media({
                                 title: 'Select Image',
                                 multiple: false,
                                 default_tab: 'upload'
-        
+
                             }).open()
                                 .on('select', function (e) {
                                     var selected_image = image.state().get('selection').first();
                                     var obj = {};
                                     obj.index = data.index;
-                                    obj.url = selected_image.toJSON().url; 
+                                    obj.url = selected_image.toJSON().url;
                                     obj.type = "imageResponse";
-                                    iframe.contentWindow.postMessage(JSON.stringify(obj), "*");                                    
+                                    iframe.contentWindow.postMessage(JSON.stringify(obj), "*");
                                 });
-                        }
+                        } else /* if (data.type == "data") */ {
+                            tb_remove();
+                            window.removeEventListener("message", receiveMetadata);
+                            var scriptData = event.data;
+                            var stripped_image_name = (image_name.substr(0,4) == "xmp_") ? image_name.substr(4) : image_name;
+                            var return_text = '<img data-4c="xmp_' + stripped_image_name + '" src="' + image_url + '" data-4c-metadata="'+ encodeURI(scriptData) +'"/>';
+                            var similar_images = ed.dom.select('img[data-4c="'+ image_name +'"]');
+                            similar_images.forEach(function(img){
+                                img.setAttribute('data-4c', 'xmp_' + stripped_image_name);
+                                img.setAttribute('data-4c-metadata', encodeURI(scriptData));
+                            });
+                            remove_script_tags(image_name);
+                            ed.execCommand("mceInsertContent", 0, return_text);
+                        }  
                         return;
                     }
 
                     return iframe;
                 }
 
+                function remove_script_tags(tag) {
+                    var scriptArray = ed.dom.select('img.mce-object[alt="<script>"]')
+                    scriptArray.forEach(function (script) {
+                        if (jQuery(urldecode(script.getAttribute('data-wp-preserve'))).attr('data-4c-meta') == tag) {
+                            script.remove();
+                        }
+                    });
+                }
             });
 
         },
