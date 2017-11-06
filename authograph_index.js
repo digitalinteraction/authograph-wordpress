@@ -64,7 +64,7 @@
 
                             //get pre-existing metadata from the image using wordpress api
                             jQuery.get("/wp-json/wp_authograph/metadata/" + image_id, function (data, status) {
-                                var obj = (script_element.el && script_element.el.length > 0) ? JSON.parse(jQuery(urldecode(script_element.el[0].getAttribute('data-wp-preserve'))).html()) : JSON.parse(data);
+                                var obj = (script_element && script_element.el && script_element.el.length > 0) ? JSON.parse(jQuery(urldecode(script_element.el[0].getAttribute('data-wp-preserve'))).html()) : JSON.parse(data);
                                 obj.url = image_url;
                                 obj.version = VERSION;
                                 obj.type = "data";
