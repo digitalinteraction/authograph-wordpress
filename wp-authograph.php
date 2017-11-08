@@ -1,13 +1,13 @@
 <?php 
 /*
-Plugin Name: Authograph
+Plugin Name: Four Corners
 Plugin URI:  https://fourcorners.io/
-Description: WordPress Plugin to create and embed authograph images into wordpress content
+Description: WordPress Plugin to create and embed Four Corners images into wordpress content
 Version:     1.3
 Author:      Open Lab, Newcastle University
 Author URI:  https://openlab.ncl.ac.uk
-License:     GPL2
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License:     MIT
+License URI: https://opensource.org/licenses/MIT
 */
 
 
