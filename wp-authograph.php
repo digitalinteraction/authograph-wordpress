@@ -14,7 +14,7 @@ License URI: https://opensource.org/licenses/MIT
 
 function authograph_link_script(){
     $ffVersion = "*"; 
-    wp_enqueue_script("authograph_render",".viewer/4c.js",null,true);       
+    wp_enqueue_script("authograph_render", plugins_url().'/wp-authograph/viewer/4c.js',null,true);       
 }
 add_action('wp_enqueue_scripts','authograph_link_script');
 
