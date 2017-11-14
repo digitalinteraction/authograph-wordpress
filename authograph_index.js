@@ -63,15 +63,23 @@
                             var iframe = loadFrame(image_name, image_url);
 
                             //get pre-existing metadata from the image using wordpress api
-                            jQuery.get("/wp-json/wp_authograph/metadata/" + image_id, function (data, status) {
-                                var obj = (script_element && script_element.el && script_element.el.length > 0) ? JSON.parse(jQuery(urldecode(script_element.el[0].getAttribute('data-wp-preserve'))).html()) : JSON.parse(data);
-                                obj.url = image_url;
-                                obj.version = VERSION;
-                                obj.type = "data";
-                                iframe.contentWindow.postMessage(JSON.stringify(obj), "*");
-                            });
- 
-                            
+                            jQuery("iframe#TB_iframeContent").load(function () {
+                                jQuery.get("/wp-json/wp_authograph/metadata/" + image_id, function (data, status) {
+                                    var obj = (script_element && script_element.el && script_element.el.length > 0) ? JSON.parse(jQuery(urldecode(script_element.el[0].getAttribute('data-wp-preserve'))).html()) : JSON.parse(data);
+                                    obj.url = image_url;
+                                    obj.version = VERSION;
+                                    obj.type = "data";
+                                    iframe.contentWindow.postMessage(JSON.stringify(obj), "*");
+                                }).fail(function () {
+                                    var obj = (script_element && script_element.el && script_element.el.length > 0) ? JSON.parse(jQuery(urldecode(script_element.el[0].getAttribute('data-wp-preserve'))).html()) : {};
+                                    obj.url = image_url;
+                                    obj.version = VERSION;
+                                    obj.type = "data";
+                                    iframe.contentWindow.postMessage(JSON.stringify(obj), "*");
+                                });
+
+
+                            })
                         })
                 }
 
@@ -112,7 +120,7 @@
 
                 function loadFrame(image_name, image_url) {
                     //display editor
-                    var tb_frame = authograph_php.plugin_url + "/editor/?TB_iframe=true";
+                    var tb_frame = authograph_php.plugin_url + "editor/?TB_iframe=true";
                     tb_show("Four Corners - Metadata Editor", tb_frame);
                     var iframe = jQuery("iframe#TB_iframeContent")[0];
 
@@ -148,16 +156,16 @@
                             tb_remove();
                             window.removeEventListener("message", receiveMetadata);
                             var scriptData = event.data;
-                            var stripped_image_name = (image_name.substr(0,4) == "xmp_") ? image_name.substr(4) : image_name;
-                            var return_text = '<img data-4c="xmp_' + stripped_image_name + '" src="' + image_url + '" data-4c-metadata="'+ encodeURI(scriptData) +'"/>';
-                            var similar_images = ed.dom.select('img[data-4c="'+ image_name +'"]');
-                            similar_images.forEach(function(img){
+                            var stripped_image_name = (image_name.substr(0, 4) == "xmp_") ? image_name.substr(4) : image_name;
+                            var return_text = '<img data-4c="xmp_' + stripped_image_name + '" src="' + image_url + '" data-4c-metadata="' + encodeURI(scriptData) + '"/>';
+                            var similar_images = ed.dom.select('img[data-4c="' + image_name + '"]');
+                            similar_images.forEach(function (img) {
                                 img.setAttribute('data-4c', 'xmp_' + stripped_image_name);
                                 img.setAttribute('data-4c-metadata', encodeURI(scriptData));
                             });
                             remove_script_tags(image_name);
                             ed.execCommand("mceInsertContent", 0, return_text);
-                        }  
+                        }
                         return;
                     }
 

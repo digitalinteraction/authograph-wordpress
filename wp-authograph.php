@@ -14,7 +14,7 @@ License URI: https://opensource.org/licenses/MIT
 
 function authograph_link_script(){
     $ffVersion = "*"; 
-    wp_enqueue_script("authograph_render", plugins_url().'/wp-authograph/viewer/4c.js',null,true);       
+    wp_enqueue_script("authograph_render", plugins_url('viewer/4c.js', __FILE__),null,true);       
 }
 add_action('wp_enqueue_scripts','authograph_link_script');
 
@@ -24,12 +24,10 @@ function authograph_enqueue_plugin_scripts($plugin_array)
 {
     //enqueue TinyMCE plugin script with its ID.
     $plugin_array["authograph_button_plugin"] =  plugin_dir_url(__FILE__) . "authograph_index.js";
-
-
     wp_register_script('authograph_index','',array(),null,true);
     wp_enqueue_script('authograph_index');
-
-    $authograph_custom = array( 'plugin_url' => plugins_url().'/wp-authograph/' );
+    
+    $authograph_custom = array( 'plugin_url' => plugin_dir_url( __FILE__ ));
     wp_localize_script( 'authograph_index', 'authograph_php', $authograph_custom );
 
     
