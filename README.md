@@ -10,7 +10,7 @@ See the [Project Site](https://fourcorners.io) for more background on the projec
 
 # Installing the Plugin
 
-[Download the plugin](https://downloads.wordpress.org/plugin/four-corners.1.3.zip) from our repository to your local computer.
+[Download the plugin](https://github.com/digitalinteraction/fourcorners-wordpress/archive/1.3.zip) from our repository to your local computer.
 
 In your Wordpress admin panel `admin > add plugin > upload plugin`:
 
